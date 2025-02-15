@@ -4,12 +4,18 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 
 @Entity
 public class Review {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
+    @ManyToOne
+    @JoinColumn(name = "movie_id")
+    private Movie movie;
 
     String username;
     Rating rating;
@@ -20,7 +26,12 @@ public class Review {
         this.username = username;
         this.rating = rating;
         this.comment = comment;
-
+    }
+    public Review(String username, Rating rating, String comment, Movie movie) {
+        this.username = username;
+        this.rating = rating;
+        this.comment = comment;
+        this.movie = movie;
     }
     public Long getId() {
         return this.id;

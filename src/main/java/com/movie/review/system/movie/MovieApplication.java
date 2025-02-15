@@ -6,6 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,8 +37,10 @@ public class MovieApplication {
 				logger.info("[Title = " + movie.getTitle() + " , Genre = " + movie.getGenre() + " , ReleaseYear = " + String.valueOf(movie.getReleaseYear()) + "]");;
 			}
 
-			reviewRepository.save(new Review("Martin van Kuik", Rating.GOOD, "Perfect movie!"));
-			reviewRepository.save(new Review("Theodore Roosevelt", Rating.BAD, "Distasteful."));
+			Optional<Movie> movie = movieRepository.findById(1L);
+
+			reviewRepository.save(new Review("Martin van Kuik", Rating.GOOD, "Perfect movie!", movie.get()));
+			reviewRepository.save(new Review("Theodore Roosevelt", Rating.BAD, "Distasteful.", movie.get()));
 
 			logger.info("---------------------------------");
 			logger.info(reviewRepository.findById(1L).toString());
@@ -47,6 +50,18 @@ public class MovieApplication {
 			for (Review review : reviews) {
 				logger.info("[Name = " + review.getUser() + " , Rating = " + review.getRating().name() + " , Comment = " + review.getComment() + "]");;
 			}
+	
+			logger.info("---------------------------------");
+			logger.info("User Reviews For Movie Inception");
+			logger.info("---------------------------------");
+			
+			Optional<Movie> myMovie = movieRepository.findByIdWithReviews(movie.get().getId());
+
+			for (Review review : myMovie.get().getReviews()) {
+				logger.info(review.toString());
+			}
+
+			logger.info("---------------------------------");
 		};
 	}
 

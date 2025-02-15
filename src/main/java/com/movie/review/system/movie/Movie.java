@@ -1,9 +1,15 @@
 package com.movie.review.system.movie;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 
 @Entity
 public class Movie {
@@ -15,6 +21,16 @@ public class Movie {
     private String genre;
     private int releaseYear;
     private String director;
+    
+    @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<Review> reviews = new ArrayList<>();;
+
+    public List<Review> getReviews() {
+        return reviews;
+    }
+    public void setReviews(List<Review> reviews) {
+        this.reviews = reviews;
+    }
     public String getDirector() {
         return director;
     }
